@@ -9,6 +9,7 @@
 #' @param playerid The MLBAM ID for the player whose data you want to query.
 #' @param player_type The player type. Can be \code{batter} or \code{pitcher}.
 #' Default is \code{batter}
+#' @param stadium MLB id for the ballpark
 #' @param ... currently ignored
 #' @return Returns a tibble with Statcast data with the following columns:
 #' 
@@ -150,7 +151,8 @@
 
 statcast_search <- function(start_date = Sys.Date() - 1, end_date = Sys.Date(),
                                    playerid = NULL,
-                                   player_type = "batter", ...) {
+                                   player_type = "batter", 
+                                   stadium = NULL, ...) {
   # Check for other user errors.
   if (start_date <= "2015-03-01") { # March 1, 2015 was the first date of Spring Training.
     message("Some metrics such as Exit Velocity and Batted Ball Events have only been compiled since 2015.")
@@ -178,7 +180,7 @@ statcast_search <- function(start_date = Sys.Date() - 1, end_date = Sys.Date(),
     "hfBBT", "",
     "hfPR", "",
     "hfZ", "",
-    "stadium", "",
+    "stadium", ifelse(is.null(stadium), "", as.character(stadium)),
     "hfBBL", "",
     "hfNewZones", "",
     "hfGT", "R%7CPO%7CS%7C&hfC",
